@@ -13,7 +13,7 @@ get_code frontend &>> ${log}
 check_status
 
 print_head "coping the code to defaulf location"
-cp /code/frontend/* /usr/share/nginx/html/ &>> ${log}
+cp -r /code/frontend/* /usr/share/nginx/html/ &>> ${log}
 check_status
 
 print_head "setup nginx conf file"
