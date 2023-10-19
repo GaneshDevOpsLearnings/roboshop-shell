@@ -13,11 +13,11 @@ get_code froentend &>> ${log}
 check_status
 
 print_head "coping the code to defaulf location"
-cp froented/* /usr/share/nginx/html/ &>> ${log}
+cp /code/froented/* /usr/share/nginx/html/ &>> ${log}
 check_status
 
 print_head "setup nginx conf file"
-cp files/nginx.conf /etc/nginx/default.d/roboshop.conf &>> ${log}
+cp ${script_location}/files/nginx.conf /etc/nginx/default.d/roboshop.conf &>> ${log}
 check_status
 
 print_head "restart nginx service"
