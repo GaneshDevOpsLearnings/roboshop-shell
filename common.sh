@@ -20,4 +20,5 @@ get_code(){
     mkdir -p /code
     cd /code
     git clone "https://github.com/roboshop-Project/$1.git"
+    check_status
 }
