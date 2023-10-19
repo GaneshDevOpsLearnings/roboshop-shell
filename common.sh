@@ -17,6 +17,7 @@ check_status(){
 
 get_code(){
     rm -rf /code/*
+    mkdir -p /code
     cd /code
     git clone "https://github.com/roboshop-Project/frontend.git"
 }
