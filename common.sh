@@ -40,9 +40,16 @@ app_prereq(){
     get_code $1
     check_status
 
-    print_head "install dependencies"
-    npm install &>> ${log}
-    check_status
+    if [ $1 == "shipping" ];then
+        print_head "install dependencies"
+        mvn clean package &>> ${log}
+        mv target/shipping-1.0.jar shipping.jar &>> ${log}
+        check_status
+    else
+        print_head "install dependencies"
+        npm install &>> ${log}
+        check_status
+    fi
 
     print_head "setting up $1 service"
     cp ${script_location}/files/$1.service /etc/systemd/system/
@@ -63,8 +70,17 @@ app_prereq(){
         check_status
 
         print_head "load schema"
-        mongo --host 172.31.42.190 </app/schema/$1.js &>> ${log}
+        mongo --host <mongodb IPADDRESS> </app/schema/$1.js &>> ${log}
         check_status
+    else if [ ${schema_type} == mysql ]; then
+        print_head "installing mysql client"
+        dnf install mysql -y
+        check_status
+        
+        print_head "load schema"
+        mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/schema/shipping.sql
+        check_status
+
     fi
 }
 
@@ -74,5 +90,7 @@ System_setup(){
         sudo yum install https://rpm.nodesource.com/pub_18.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm -y &>> ${log}
         sudo yum install nodejs -y --setopt=nodesource-nodejs.module_hotfixes=1 &>> ${log}
         check_status
+    else if [ $1 == "java" ]; then
+        dnf install maven -y
     fi
 }
