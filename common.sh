@@ -40,7 +40,7 @@ app_prereq(){
     check_status
 
     print_head "install dependencies"
-    npm install
+    npm install &>> ${log}
     check_status
 
     print_head "setting up $1 service"
@@ -62,7 +62,7 @@ app_prereq(){
         check_status
 
         print_head "load schema"
-        mongo --host 172.31.42.190 </code/schema/$1.js &>> ${log}
+        mongo --host 172.31.42.190 </code/$1/schema/$1.js &>> ${log}
         check_status
     fi
 }
