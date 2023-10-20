@@ -17,6 +17,11 @@ print_head "install mysql"
 dnf install mysql-community-server -y &>> ${log}
 check_status
 
+print_head "enable and start mysql"
+systemctl enable mysqld
+systemctl restart mysqld
+check_status
+
 print_head "Set password for root user"
 mysql_secure_installation --set-root-pass ${root_password} &>> ${log}
 check_status
