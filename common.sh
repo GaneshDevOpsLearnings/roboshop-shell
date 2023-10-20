@@ -62,7 +62,7 @@ app_prereq(){
         check_status
 
         print_head "load schema"
-        mongo --host 172.31.42.190 </app/schema/$1.js &>> ${log}
+        mongo --host 172.31.42.190 </code/schema/$1.js &>> ${log}
         check_status
     fi
 }
