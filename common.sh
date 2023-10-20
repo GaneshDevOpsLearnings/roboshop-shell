@@ -16,12 +16,12 @@ check_status(){
 }
 
 get_code(){
-    rm -rf /code/* &>> ${log}
-    mkdir -p /code &>> ${log}
-    cd /code &>> ${log}
+    rm -rf /app/* &>> ${log}
+    mkdir -p /app &>> ${log}
+    cd /app &>> ${log}
     git clone "https://github.com/roboshop-Project/$1.git" &>> ${log}
     check_status
-    cd /code/$1
+    cd /app/$1
     check_status
 }
 
@@ -50,7 +50,7 @@ app_prereq(){
     print_head "daemon reload"
     systemctl daemon-reload &>> ${log}
     systemctl enable $1  &>> ${log}
-    systemctl start $1 &>> ${log}
+    systemctl restart $1 &>> ${log}
     check_status
     if [ ${schema_type} == mongodb ]; then
         print_head "setting up the mongodb repo file"
@@ -62,7 +62,7 @@ app_prereq(){
         check_status
 
         print_head "load schema"
-        mongo --host 172.31.42.190 </code/$1/schema/$1.js &>> ${log}
+        mongo --host 172.31.42.190 </app/$1/schema/$1.js &>> ${log}
         check_status
     fi
 }
