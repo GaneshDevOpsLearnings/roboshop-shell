@@ -52,16 +52,7 @@ app_prereq(){
     systemctl enable $1  &>> ${log}
     systemctl start $1 &>> ${log}
     check_status
-
-}
-
-System_setup(){
-    if [ $1 == "nodejs" ]; then
-        print_head "node js setup"
-        sudo yum install https://rpm.nodesource.com/pub_18.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm -y &>> ${log}
-        sudo yum install nodejs -y --setopt=nodesource-nodejs.module_hotfixes=1 &>> ${log}
-        check_status
-
+    if [ ${schema_type} == mongodb ]; then
         print_head "setting up the mongodb repo file"
         cp ${script_location}/files/mongodb.repo /etc/yum.repos.d/
         check_status
@@ -71,7 +62,16 @@ System_setup(){
         check_status
 
         print_head "load schema"
-        mongo --host MONGODB-SERVER-IPADDRESS </app/schema/catalogue.js &>> ${log}
+        mongo --host MONGODB-SERVER-IPADDRESS </app/schema/$1.js &>> ${log}
+        check_status
+    fi
+}
+
+System_setup(){
+    if [ $1 == "nodejs" ]; then
+        print_head "node js setup"
+        sudo yum install https://rpm.nodesource.com/pub_18.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm -y &>> ${log}
+        sudo yum install nodejs -y --setopt=nodesource-nodejs.module_hotfixes=1 &>> ${log}
         check_status
     fi
 }
