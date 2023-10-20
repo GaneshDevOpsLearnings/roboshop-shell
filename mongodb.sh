@@ -9,10 +9,10 @@ dnf install mongodb-org -y &>> ${log}
 check_status
 
 print_head "update the listing address"
-sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>> ${log}
 check_status
 
 print_head "enabling mongod"
-systemctl enable mongod
-systemctl restart mongod
+systemctl enable mongod &>> ${log}
+systemctl restart mongod &>> ${log}
 check_status
