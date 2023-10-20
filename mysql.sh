@@ -18,5 +18,5 @@ dnf install mysql-community-server -y &>> ${log}
 check_status
 
 print_head "Set password for root user"
-mysql_secure_installation --set-root-pass ${root_password}
+mysql_secure_installation --set-root-pass ${root_password} &>> ${log}
 check_status
