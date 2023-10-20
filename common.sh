@@ -21,7 +21,8 @@ get_code(){
     cd /app &>> ${log}
     git clone "https://github.com/roboshop-Project/$1.git" &>> ${log}
     check_status
-    cd /app/$1
+    cp /app/$1 /app &>> ${log}
+    cd /app &>> ${log}
     check_status
 }
 
@@ -62,7 +63,7 @@ app_prereq(){
         check_status
 
         print_head "load schema"
-        mongo --host 172.31.42.190 </app/$1/schema/$1.js &>> ${log}
+        mongo --host 172.31.42.190 </app/schema/$1.js &>> ${log}
         check_status
     fi
 }
