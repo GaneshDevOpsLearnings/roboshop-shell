@@ -45,6 +45,9 @@ app_prereq(){
         mvn clean package &>> ${log}
         mv target/shipping-1.0.jar shipping.jar &>> ${log}
         check_status
+    else if [ $1 == "payment" ]
+        then
+            pip3.6 install -r requirements.txt &>> ${log}
     else
         print_head "install dependencies"
         npm install &>> ${log}
@@ -52,7 +55,7 @@ app_prereq(){
     fi
 
     print_head "setting up $1 service"
-    cp ${script_location}/files/$1.service /etc/systemd/system/
+    cp ${script_location}/files/$1.service /etc/systemd/system/ &>> ${log}
     check_status
 
     print_head "daemon reload"
@@ -62,7 +65,7 @@ app_prereq(){
     check_status
     if [ ${schema_type} == mongodb ]; then
         print_head "setting up the mongodb repo file"
-        cp ${script_location}/files/mongodb.repo /etc/yum.repos.d/
+        cp ${script_location}/files/mongodb.repo /etc/yum.repos.d/ &>> ${log}
         check_status
 
         print_head "installing mongodb client"
@@ -74,11 +77,11 @@ app_prereq(){
         check_status
     else if [ ${schema_type} == mysql ]; then
         print_head "installing mysql client"
-        dnf install mysql -y
+        dnf install mysql -y &>> ${log}
         check_status
         
         print_head "load schema"
-        mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/schema/shipping.sql
+        mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/schema/shipping.sql &>> ${log}
         check_status
 
     fi
@@ -91,6 +94,12 @@ System_setup(){
         sudo yum install nodejs -y --setopt=nodesource-nodejs.module_hotfixes=1 &>> ${log}
         check_status
     else if [ $1 == "java" ]; then
-        dnf install maven -y
+        print_head "install maven"
+        dnf install maven -y &>> ${log}
+        check_status
+    else if [ $1 == "python" ]; then
+        print_head "install python"
+        dnf install python36 gcc python3-devel -y &>> ${log}
+        check_status
     fi
 }
