@@ -47,7 +47,16 @@ app_prereq(){
         check_status
     else if [ $1 == "payment" ]
         then
+            print_head "install dependencies"
             pip3.6 install -r requirements.txt &>> ${log}
+            check_status
+    else if [ $1 == "dispatch" ]
+        then
+            print_head "install dependencies"
+            go mod init dispatch &>> ${log}
+            go get &>> ${log}
+            go init &>> ${log}
+            check_status
     else
         print_head "install dependencies"
         npm install &>> ${log}
@@ -100,6 +109,10 @@ System_setup(){
     else if [ $1 == "python" ]; then
         print_head "install python"
         dnf install python36 gcc python3-devel -y &>> ${log}
+        check_status
+    else if [ $1 == "go" ]; then 
+        print_head "install go"
+        dnf install golang -y &>> ${log}
         check_status
     fi
 }
