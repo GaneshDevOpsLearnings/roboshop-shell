@@ -21,7 +21,7 @@ get_code(){
     cd /app &>> ${log}
     git clone "https://github.com/roboshop-Project/$1.git" &>> ${log}
     check_status
-    cp /app/$1 /app &>> ${log}
+    cp -r /app/$1/* /app/ &>> ${log}
     cd /app &>> ${log}
     check_status
 }
