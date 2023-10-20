@@ -24,3 +24,54 @@ get_code(){
     cd /code/$1
     check_status
 }
+
+app_prereq(){
+    print_head "adding demon user"
+    id roboshop &>> ${log}
+        if [ $? -eq 0 ]; then
+            echo -e "user already exists"
+        else
+            useradd roboshop &>> ${log}
+        fi
+    check_status
+
+    print_head "getting code from git"
+    get_code $1
+    check_status
+
+    print_head "install dependencies"
+    npm install
+    check_status
+
+    print_head "setting up $1 service"
+    cp ${script_location}/files/$1.service /etc/systemd/system/
+    check_status
+
+    print_head "daemon reload"
+    systemctl daemon-reload &>> ${log}
+    systemctl enable $1  &>> ${log}
+    systemctl start $1 &>> ${log}
+    check_status
+
+}
+
+System_setup(){
+    if [ $1 == "nodejs" ]; then
+        print_head "node js setup"
+        sudo yum install https://rpm.nodesource.com/pub_18.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm -y &>> ${log}
+        sudo yum install nodejs -y --setopt=nodesource-nodejs.module_hotfixes=1 &>> ${log}
+        check_status
+
+        print_head "setting up the mongodb repo file"
+        cp ${script_location}/files/mongodb.repo /etc/yum.repos.d/
+        check_status
+
+        print_head "installing mongodb client"
+        dnf install mongodb-org-shell -y &>> ${log}
+        check_status
+
+        print_head "load schema"
+        mongo --host MONGODB-SERVER-IPADDRESS </app/schema/catalogue.js &>> ${log}
+        check_status
+    fi
+}
