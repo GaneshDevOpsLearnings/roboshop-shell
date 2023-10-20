@@ -1,4 +1,4 @@
-if [ -z ${root_password} ]
+if [ -z "${root_password}" ]
 then
     echo -e "please set the root_password variable"
     exit 1
