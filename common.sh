@@ -16,10 +16,11 @@ check_status(){
 }
 
 get_code(){
-    rm -rf /code/*
-    mkdir -p /code
-    cd /code
-    git clone "https://github.com/roboshop-Project/$1.git"
+    rm -rf /code/* &>> ${log}
+    mkdir -p /code &>> ${log}
+    cd /code &>> ${log}
+    git clone "https://github.com/roboshop-Project/$1.git" &>> ${log}
+    check_status
+    cd /code/$1
     check_status
 }
-
