@@ -45,12 +45,12 @@ app_prereq(){
         mvn clean package &>> ${log}
         mv target/shipping-1.0.jar shipping.jar &>> ${log}
         check_status
-    else if [ $1 == "payment" ]
+    elif [ $1 == "payment" ]
         then
             print_head "install dependencies"
             pip3.6 install -r requirements.txt &>> ${log}
             check_status
-    else if [ $1 == "dispatch" ]
+    elif [ $1 == "dispatch" ]
         then
             print_head "install dependencies"
             go mod init dispatch &>> ${log}
@@ -84,7 +84,7 @@ app_prereq(){
         print_head "load schema"
         mongo --host <mongodb IPADDRESS> </app/schema/$1.js &>> ${log}
         check_status
-    else if [ ${schema_type} == mysql ]; then
+    elif [ ${schema_type} == mysql ]; then
         print_head "installing mysql client"
         dnf install mysql -y &>> ${log}
         check_status
@@ -102,15 +102,15 @@ System_setup(){
         sudo yum install https://rpm.nodesource.com/pub_18.x/nodistro/repo/nodesource-release-nodistro-1.noarch.rpm -y &>> ${log}
         sudo yum install nodejs -y --setopt=nodesource-nodejs.module_hotfixes=1 &>> ${log}
         check_status
-    else if [ $1 == "java" ]; then
+    elif [ $1 == "java" ]; then
         print_head "install maven"
         dnf install maven -y &>> ${log}
         check_status
-    else if [ $1 == "python" ]; then
+    elif [ $1 == "python" ]; then
         print_head "install python"
         dnf install python36 gcc python3-devel -y &>> ${log}
         check_status
-    else if [ $1 == "go" ]; then 
+    elif [ $1 == "go" ]; then 
         print_head "install go"
         dnf install golang -y &>> ${log}
         check_status
